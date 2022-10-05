@@ -152,16 +152,15 @@ const addRole = () => {
                 choices: deptChoices
             }
         ]).then(ans => {
-            var id = db.promise().query(`SELECT id FROM department WHERE name = ?`, ans.addDept)
+            db.promise().query(`SELECT id FROM department WHERE name = ?`, ans.addDept)
                 .then(answer => {
                     let mappedId = answer[0].map(obj => obj.id);
                     // console.log(mappedId[0])
                     return mappedId[0]
                 })
-                .then(db.promise().query(`INSERT INTO roles(title, salary, department_id)
-                VALUES(?, ?, ?)`, [ans.roleTitle, ans.roleSalary, id]))
-                .then((data) => {
-                    console.log(data)
+                .then((mappedId) => {
+                    db.promise().query(`INSERT INTO roles(title, salary, department_id)
+                VALUES(?, ?, ?)`, [ans.roleTitle, ans.roleSalary, mappedId]);
                     init()
                 })
         })
