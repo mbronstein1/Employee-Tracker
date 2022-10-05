@@ -155,7 +155,7 @@ const addRole = () => {
             var id = db.promise().query(`SELECT id FROM department WHERE name = ?`, ans.addDept)
                 .then(answer => {
                     let mappedId = answer[0].map(obj => obj.id);
-                    console.log(mappedId[0])
+                    // console.log(mappedId[0])
                     return mappedId[0]
                 })
                 .then(db.promise().query(`INSERT INTO roles(title, salary, department_id)
@@ -168,6 +168,41 @@ const addRole = () => {
 };
 
 const addEmployee = () => {
+    const rollChoices = () => db.promise().query(`SELECT * FROM roles`)
+    .then((rows) => {
+        let arrNames = rows[0].map(obj => obj.name);
+        return arrNames
+    })
     inquirer
-        .pr
+        .prompt([
+            {
+                type: "input",
+                message: "What is the employee's first name?",
+                name: "firstName"
+            },
+            {
+                type: "input",
+                message: "What is the employee's last name?",
+                name: "lastName"
+            },
+            // {
+            //     type: "list",
+            //     message: "What is the employee's role?",
+            //     name: "employeeRole",
+            //     choices: rollChoices
+            // }
+        ]).then(ans => {
+            db.query(`INSERT INTO employees(first_name, last_name)
+                    VALUES(?, ?)`, [ans.firstName, ans.lastName], (err, results) => {
+                if (err) {
+                    console.log(err)
+                } else {
+                    db.query(`SELECT * FROM employees`, (err, results) => {
+                        err ? console.error(err) : console.table(results);
+                        init();
+                    })
+                }
+            }
+            )
+        })
 }
