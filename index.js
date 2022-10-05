@@ -117,10 +117,57 @@ const addDept = () => {
                 if (err) {
                     console.log(err)
                 } else {
-                    console.log(results);
-                    init()
+                    db.query(`SELECT * FROM department`, (err, results) => {
+                        err ? console.error(err) : console.table(results);
+                        init();
+                    })
                 }
             }
             )
         })
+};
+
+const addRole = () => {
+    const deptChoices = () => db.promise().query(`SELECT * FROM department`)
+        .then((rows) => {
+            let arrNames = rows[0].map(obj => obj.name);
+            return arrNames
+        })
+    inquirer
+        .prompt([
+            {
+                type: "input",
+                message: "What is the title of the role you'd like to add?",
+                name: "roleTitle"
+            },
+            {
+                type: "input",
+                message: "What is the salary for this role?",
+                name: "roleSalary"
+            },
+            {
+                type: "list",
+                message: "Which department is this role in?",
+                name: "addDept",
+                choices: deptChoices
+            }
+        ]).then(ans => {
+            var id = db.promise().query(`SELECT id FROM department WHERE name = ?`, ans.addDept)
+                .then(answer => {
+                    let mappedId = answer[0].map(obj => obj.id);
+                    console.log(mappedId[0])
+                    return mappedId[0]
+                })
+                .then(db.promise().query(`INSERT INTO roles(title, salary, department_id)
+                VALUES(?, ?, ?)`, [ans.roleTitle, ans.roleSalary, id]))
+                .then((data) => {
+                    console.log(data)
+                    init()
+                })
+        })
+};
+
+const addEmployee = () => {
+    inquirer
+        .pr
 }
