@@ -168,11 +168,11 @@ const addRole = () => {
 };
 
 const addEmployee = () => {
-    const rollChoices = () => db.promise().query(`SELECT * FROM roles`)
-    .then((rows) => {
-        let arrNames = rows[0].map(obj => obj.name);
-        return arrNames
-    })
+    // const rollChoices = () => db.promise().query(`SELECT * FROM roles`)
+    // .then((rows) => {
+    //     let arrNames = rows[0].map(obj => obj.name);
+    //     return arrNames
+    // })
     inquirer
         .prompt([
             {
