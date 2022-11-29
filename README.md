@@ -1,4 +1,4 @@
-# Employee-Tracker-Challenge-12
+# Employee Tracker
 
 ## Description
 This is the twelfth challenge in the Northwestern Coding Bootcamp (Module 12). We were required to create, read, and update from a database containing tables for departments, employees, and roles through CLI input.
